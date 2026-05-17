@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>monday Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d0d0d;font-family:'DM Sans',sans-serif}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+const LOGO_B64 = "data:image/png;base64,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";
+const AVATARS = [
+  { bg: "#3a4a8c", txt: "#a8b8ff" }, { bg: "#8c3a4a", txt: "#ffb8c8" },
+  { bg: "#3a8c4a", txt: "#a8ffb8" }, { bg: "#6a3a8c", txt: "#d8a8ff" },
+  { bg: "#8c6a3a", txt: "#ffd8a8" }, { bg: "#3a7a8c", txt: "#a8e8ff" },
+  { bg: "#8c3a7a", txt: "#ffa8f0" }, { bg: "#5a8c3a", txt: "#c8ffa8" },
+];
+
+const EMPLOYEES = [
+  { name: "Yael Cohen", dept: "R&D", pts: 2840, days: 18, av: 0 },
+  { name: "Avi Mizrahi", dept: "Sales", pts: 2610, days: 16, av: 1 },
+  { name: "Noa Ben-David", dept: "Marketing", pts: 2430, days: 15, av: 2 },
+  { name: "Ron Shapiro", dept: "Product", pts: 2200, days: 14, av: 3 },
+  { name: "Dana Levy", dept: "Finance", pts: 2050, days: 13, av: 4 },
+  { name: "Elan Katz", dept: "HR", pts: 1890, days: 12, av: 5 },
+  { name: "Maya Stern", dept: "Legal", pts: 1720, days: 11, av: 6 },
+  { name: "Gal Peretz", dept: "Design", pts: 1540, days: 10, av: 7 },
+];
+
+const T = {
+  en: {
+    appSub: "Your office fitness challenge",
+    tabs: ["My Program", "Leaderboard", "Challenges"],
+    buildProgram: "Build your program",
+    buildSub: "Answer a few quick questions — we'll generate a personalized plan just for you.",
+    steps: ["About you", "Gender", "Measurements", "Goal", "Experience", "Duration", "Schedule"],
+    nameQ: "What's your name?", namePh: "Your first name",
+    genderQ: "How do you identify?",
+    genderOpts: ["Male", "Female", "Non-binary", "Prefer not to say"],
+    statsQ: "Your stats", ageLbl: "Age", agePh: "e.g. 30",
+    weightLbl: "Weight (kg)", weightPh: "e.g. 72",
+    heightLbl: "Height (cm)", heightPh: "e.g. 175",
+    goalQ: "What's your primary goal?",
+    goalOpts: ["Lose weight", "Build muscle", "Get fit & energized", "Bulk up", "Improve endurance"],
+    levelQ: "Current fitness level?",
+    levelOpts: ["Beginner", "Intermediate", "Advanced"],
+    durationQ: "Choose your program length",
+    durationPlans: [
+      { w: "1", label: "Quick Start", desc: "Perfect for beginners or a busy month" },
+      { w: "2", label: "Solid Commitment", desc: "Build real habits & visible results" },
+      { w: "3", label: "Full Transformation", desc: "Maximum change, inside & out" },
+    ],
+    daysQ: "Days per week you can train",
+    daysOpts: ["3", "4", "5", "6"], daysLabel: "days/week",
+    generate: "Generate my program →",
+    generating: "Building your program...", genSub: "Calculating your macros, workout plan & schedule",
+    workoutTab: "Workout", nutritionTab: "Nutrition", redoBtn: "← Redo questionnaire",
+    overallProgress: "Overall progress", daysLabel2: "days done", remaining: "remaining",
+    markComplete: "Mark complete", completed: "✓ Completed",
+    dailyTargets: "Daily targets", tailored: "Tailored for your goal:",
+    mealTimes: ["Breakfast", "Lunch", "Snack", "Dinner", "Late snack"],
+    altLabel: "🇮🇱 Israeli alternative", altBtn: "Israeli alt", hideAlt: "Hide",
+    leaderboard: "Leaderboard", lbSub: "Weekly challenge — most days completed wins",
+    yourScore: "Your score", rankOf: "Rank #%r of %t",
+    challenges: "Challenges", challengesSub: "Complete challenges to earn points and climb the leaderboard",
+    pointsEarned: "Points earned", challengesDone: "Completed",
+    challengeList: [
+      { icon: "🔥", title: "7-Day Streak", sub: "Complete workouts 7 days in a row", pts: 500, done: false },
+      { icon: "💧", title: "Hydration Hero", sub: "Log 2L of water daily for 5 days", pts: 200, done: true },
+      { icon: "🏃", title: "Run 20km", sub: "Accumulate 20km across all cardio sessions", pts: 400, done: false },
+      { icon: "🧘", title: "Recovery Week", sub: "Complete all mobility/rest sessions on schedule", pts: 150, done: true },
+      { icon: "🥗", title: "Clean Eating", sub: "Hit your macro targets 5 days straight", pts: 350, done: false },
+      { icon: "💪", title: "100 Push-ups", sub: "Do 100 push-ups total within 3 days", pts: 250, done: false },
+      { icon: "⏰", title: "Early Bird", sub: "Complete 5 workouts before 8am", pts: 300, done: false },
+      { icon: "🤝", title: "Team Spirit", sub: "Complete a workout with a monday colleague", pts: 200, done: false },
+    ],
+    hey: "Hey %n 👋", bmiLabel: "BMI",
+    calLbl: "Calories", proteinLbl: "Protein", carbsLbl: "Carbs", fatLbl: "Fat",
+    mealIdeas: "Meal ideas", daysWord: "days",
+    switchLang: "🇮🇱 עברית",
+  },
+  he: {
+    appSub: "אתגר הכושר של monday",
+    tabs: ["התוכנית שלי", "טבלת דירוגים", "אתגרים"],
+    buildProgram: "בנה את התוכנית שלך",
+    buildSub: "ענה על כמה שאלות קצרות — נייצר עבורך תוכנית אישית.",
+    steps: ["פרטים אישיים", "מגדר", "מדידות", "מטרה", "רמת ניסיון", "משך התוכנית", "לוח זמנים"],
+    nameQ: "מה שמך?", namePh: "השם הפרטי שלך",
+    genderQ: "איך אתה מגדיר את עצמך?",
+    genderOpts: ["גבר", "אישה", "נון-בינארי", "מעדיף לא לציין"],
+    statsQ: "הנתונים שלך", ageLbl: "גיל", agePh: "למשל 30",
+    weightLbl: 'משקל (ק"ג)', weightPh: "למשל 72",
+    heightLbl: 'גובה (ס"מ)', heightPh: "למשל 175",
+    goalQ: "מה המטרה העיקרית שלך?",
+    goalOpts: ["ירידה במשקל", "בניית שריר", "כושר ואנרגיה", "הגדלת מסה", "שיפור סיבולת"],
+    levelQ: "מה רמת הכושר הנוכחית שלך?",
+    levelOpts: ["מתחיל", "בינוני", "מתקדם"],
+    durationQ: "בחר את אורך התוכנית",
+    durationPlans: [
+      { w: "1", label: "התחלה מהירה", desc: "מושלם למתחילים או לחודש עמוס" },
+      { w: "2", label: "התחייבות אמיתית", desc: "בניית הרגלים ותוצאות מורגשות" },
+      { w: "3", label: "שינוי מוחלט", desc: "שינוי מקסימלי, בפנים ובחוץ" },
+    ],
+    daysQ: "כמה ימים בשבוע אתה יכול להתאמן?",
+    daysOpts: ["3", "4", "5", "6"], daysLabel: "ימים/שבוע",
+    generate: "צור את התוכנית שלי ←",
+    generating: "בונים את התוכנית שלך...", genSub: "מחשבים מאקרו, תוכנית אימון ולוח זמנים",
+    workoutTab: "אימונים", nutritionTab: "תזונה", redoBtn: "← חזרה לשאלון",
+    overallProgress: "התקדמות כוללת", daysLabel2: "ימים הושלמו", remaining: "נותרו",
+    markComplete: "סמן כהושלם", completed: "✓ הושלם",
+    dailyTargets: "יעדים יומיים", tailored: "מותאם למטרה שלך:",
+    mealTimes: ["ארוחת בוקר", "ארוחת צהריים", "חטיף", "ארוחת ערב", "נשנוש לילי"],
+    altLabel: "חלופה ישראלית", altBtn: "חלופה ישראלית", hideAlt: "הסתר",
+    leaderboard: "טבלת דירוגים", lbSub: "אתגר שבועי — מי מסיים הכי הרבה ימים מנצח",
+    yourScore: "הניקוד שלך", rankOf: "דירוג #%r מתוך %t",
+    challenges: "אתגרים", challengesSub: "השלם אתגרים כדי לצבור נקודות ולטפס בדירוג",
+    pointsEarned: "נקודות שנצברו", challengesDone: "הושלמו",
+    challengeList: [
+      { icon: "🔥", title: "רצף 7 ימים", sub: "השלם אימונים 7 ימים ברצף", pts: 500, done: false },
+      { icon: "💧", title: "גיבור ההידרציה", sub: "שתה 2 ליטר מים ביום במשך 5 ימים", pts: 200, done: true },
+      { icon: "🏃", title: 'רוץ 20 ק"מ', sub: 'צבור 20 ק"מ בכל אימוני הקרדיו', pts: 400, done: false },
+      { icon: "🧘", title: "שבוע התאוששות", sub: "השלם את כל ימי המנוחה/ניידות לפי לוח הזמנים", pts: 150, done: true },
+      { icon: "🥗", title: "אכילה נקייה", sub: "עמוד ביעדי המאקרו 5 ימים ברצף", pts: 350, done: false },
+      { icon: "💪", title: "100 שכיבות שמיכה", sub: "בצע 100 שכיבות שמיכה תוך 3 ימים", pts: 250, done: false },
+      { icon: "⏰", title: "ציפור הבוקר", sub: "השלם 5 אימונים לפני 8 בבוקר", pts: 300, done: false },
+      { icon: "🤝", title: "רוח קבוצתית", sub: "התאמן עם עמית מ-monday", pts: 200, done: false },
+    ],
+    hey: "היי %n 👋", bmiLabel: "BMI",
+    calLbl: "קלוריות", proteinLbl: "חלבון", carbsLbl: "פחמימות", fatLbl: "שומן",
+    mealIdeas: "רעיונות לארוחות", daysWord: "ימים",
+    switchLang: "🇬🇧 English",
+  },
+};
+
+const WORKOUT_PLANS = {
+  1: [
+    { day: "Mon", dayHe: "שני", focus: "Full Body", focusHe: "גוף מלא", items: ["Squats 3×12", "Push-ups 3×10", "Plank 3×30s", "Jumping jacks 3×20"] },
+    { day: "Tue", dayHe: "שלישי", focus: "Rest + Walk", focusHe: "מנוחה + הליכה", items: ["20-min brisk walk", "Light stretching 10min"] },
+    { day: "Wed", dayHe: "רביעי", focus: "Upper Body", focusHe: "פלג גוף עליון", items: ["Dumbbell rows 3×12", "Shoulder press 3×10", "Bicep curls 3×12", "Tricep dips 3×10"] },
+    { day: "Thu", dayHe: "חמישי", focus: "Rest + Walk", focusHe: "מנוחה + הליכה", items: ["20-min brisk walk", "Foam rolling 10min"] },
+    { day: "Fri", dayHe: "שישי", focus: "Lower Body", focusHe: "פלג גוף תחתון", items: ["Lunges 3×12", "Glute bridges 3×15", "Calf raises 3×20", "Wall sit 3×30s"] },
+    { day: "Sat", dayHe: "שבת", focus: "Cardio", focusHe: "קרדיו", items: ["30-min run/bike", "Core circuit 15min"] },
+    { day: "Sun", dayHe: "ראשון", focus: "Active Rest", focusHe: "מנוחה פעילה", items: ["Yoga / stretching 30min"] },
+  ],
+  2: [
+    { day: "Mon", dayHe: "שני", focus: "Strength A", focusHe: "כוח A", items: ["Barbell squat 4×8", "Bench press 4×8", "Romanian deadlift 3×10"] },
+    { day: "Tue", dayHe: "שלישי", focus: "Cardio HIIT", focusHe: "קרדיו HIIT", items: ["Warm-up 5min", "8 rounds: 30s sprint / 30s walk", "Cool-down 5min"] },
+    { day: "Wed", dayHe: "רביעי", focus: "Strength B", focusHe: "כוח B", items: ["Pull-ups 4×6", "Overhead press 4×8", "Dumbbell row 3×10"] },
+    { day: "Thu", dayHe: "חמישי", focus: "Mobility", focusHe: "ניידות", items: ["Hip flexor stretch 3×45s", "T-spine rotation 2×10", "Hamstring floss 3×45s"] },
+    { day: "Fri", dayHe: "שישי", focus: "Full Body Power", focusHe: "עוצמה מלאה", items: ["Deadlift 4×5", "DB chest fly 3×12", "Box jumps 3×8", "Farmer carry 3×20m"] },
+    { day: "Sat", dayHe: "שבת", focus: "Long Cardio", focusHe: "קרדיו ממושך", items: ["45-min steady-state run", "Post-run stretch 10min"] },
+    { day: "Sun", dayHe: "ראשון", focus: "Rest", focusHe: "מנוחה", items: ["Complete rest or light walk"] },
+  ],
+  3: [
+    { day: "Mon", dayHe: "שני", focus: "Chest/Triceps", focusHe: "חזה/טריצפס", items: ["Flat bench 4×10", "Incline DB press 3×12", "Cable fly 3×15", "Skull crushers 3×12"] },
+    { day: "Tue", dayHe: "שלישי", focus: "Legs", focusHe: "רגליים", items: ["Back squat 4×10", "Leg press 3×12", "Leg curl 3×12", "Standing calf 4×15"] },
+    { day: "Wed", dayHe: "רביעי", focus: "HIIT Cardio", focusHe: "קרדיו HIIT", items: ["10 rounds Tabata", "Battle ropes 3×30s", "Jump rope 3×1min"] },
+    { day: "Thu", dayHe: "חמישי", focus: "Back/Biceps", focusHe: "גב/ביצפס", items: ["Weighted pull-ups 4×6", "Barbell row 4×10", "Hammer curls 3×12", "Face pulls 3×15"] },
+    { day: "Fri", dayHe: "שישי", focus: "Shoulders/Core", focusHe: "כתפיים/ליבה", items: ["Military press 4×10", "Lateral raises 3×15", "Cable crunches 3×20", "L-sit holds 3×20s"] },
+    { day: "Sat", dayHe: "שבת", focus: "Active Recovery", focusHe: "התאוששות פעילה", items: ["60-min hike or bike", "Foam roll full body"] },
+    { day: "Sun", dayHe: "ראשון", focus: "Rest", focusHe: "מנוחה", items: ["Full rest — sleep 8h"] },
+  ],
+};
+
+const NUTRITION = {
+  cut: {
+    cal: 1800, p: 150, c: 160, f: 55,
+    meals: [
+      { en: "Greek yogurt + berries + oats", he: "יוגורט יווני + פירות יער + שיבולת שועל", altEn: "Leben (leben natur) + granola + banana", altHe: "לבן טבע + גרנולה + בננה" },
+      { en: "Grilled chicken + quinoa salad", he: "עוף בגריל + סלט קינואה", altEn: "Grilled chicken breast + Israeli salad + tahini", altHe: "חזה עוף + סלט ירקות ישראלי + טחינה" },
+      { en: "Protein shake + banana", he: "שייק חלבון + בננה", altEn: "Chocolate milk (low-fat) + date", altHe: "שוקו 1% + תמר" },
+      { en: "Salmon + roasted veg + sweet potato", he: "סלמון + ירקות צלויים + בטטה", altEn: "St. Peter's fish (amnon) + roasted cauliflower + sweet potato", altHe: "דג אמנון + כרובית צלויה + בטטה" },
+      { en: "Cottage cheese + almonds", he: "קוטג' + שקדים", altEn: "White cheese 5% + walnuts", altHe: "גבינה לבנה 5% + אגוזי מלך" },
+    ],
+  },
+  maintain: {
+    cal: 2200, p: 165, c: 220, f: 65,
+    meals: [
+      { en: "Eggs + avocado toast + OJ", he: "ביצים + טוסט אבוקדו + מיץ תפוזים", altEn: "Shakshuka (2 eggs) + whole wheat pita", altHe: "שקשוקה (2 ביצים) + פיתה מחיטה מלאה" },
+      { en: "Turkey + brown rice + broccoli", he: "הודו + אורז מלא + ברוקולי", altEn: "Turkey schnitzel (oven-baked) + bulgur + sautéed greens", altHe: "שניצל הודו (תנור) + בורגול + ירוקים מוקפצים" },
+      { en: "Apple + peanut butter + string cheese", he: "תפוח + חמאת בוטנים + גבינה צהובה", altEn: "Pita with hummus + cucumber sticks", altHe: "פיתה עם חומוס + מקלות מלפפון" },
+      { en: "Lean beef stir-fry + noodles", he: "נתחי בקר רזה מוקפץ + אטריות", altEn: "Ground beef + couscous + roasted peppers", altHe: "בשר טחון + קוסקוס + פלפלים צלויים" },
+      { en: "Mixed nuts + dark chocolate", he: "אגוזים מעורבים + שוקולד מריר", altEn: "Bamba + banana", altHe: "במבה + בננה" },
+    ],
+  },
+  bulk: {
+    cal: 2800, p: 200, c: 310, f: 80,
+    meals: [
+      { en: "Oatmeal + eggs + whole milk", he: "שיבולת שועל + ביצים + חלב מלא", altEn: "Oatmeal + 3 eggs + chocolate milk", altHe: "שיבולת שועל + 3 ביצים + שוקו 3%" },
+      { en: "Pasta + ground beef + tomato sauce", he: "פסטה + בשר טחון + רוטב עגבניות", altEn: "Pita + hummus + hard-boiled eggs + labneh", altHe: "פיתה + חומוס + ביצים קשות + לאבנה" },
+      { en: "Mass gainer shake + banana", he: "שייק מסה + בננה", altEn: "Date energy balls + chocolate milk", altHe: "כדורי תמרים + שוקו" },
+      { en: "Chicken thighs + rice + beans", he: "ירכי עוף + אורז + שעועית", altEn: "Roasted chicken + yellow rice + lentil soup", altHe: "עוף בתנור + אורז צהוב + מרק עדשים" },
+      { en: "Casein protein + full-fat yogurt", he: "חלבון קזאין + יוגורט שומן מלא", altEn: "Labneh + tahini + whole grain crackers", altHe: "לאבנה + טחינה + קרקרים מחיטה מלאה" },
+    ],
+  },
+};
+
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0d0d0d; }
+  .mf-app { font-family: 'DM Sans', sans-serif; background: #0d0d0d; color: #f0ede6; min-height: 100vh; }
+  .mf-inner { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
+  .mf-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+  .mf-logo { display: flex; align-items: center; gap: 8px; }
+  .mf-logo img { width: 48px; height: 48px; border-radius: 50%; display: block; }
+  .mf-logo-text { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: #f0ede6; letter-spacing: -0.5px; }
+  .mf-logo-text span { color: #b8f554; }
+  .mf-header-sub { font-size: 13px; color: #888; margin-top: 2px; }
+  .mf-lang-btn { margin-left: auto; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: #888; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .mf-lang-btn:hover { color: #b8f554; border-color: #b8f554; }
+  .mf-tabs { display: flex; gap: 4px; margin-bottom: 28px; background: #1a1a1a; border-radius: 12px; padding: 4px; border: 1px solid rgba(255,255,255,0.08); }
+  .mf-tab { flex: 1; padding: 9px 12px; border-radius: 9px; border: none; background: transparent; color: #888; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .mf-tab.active { background: #b8f554; color: #0d0d0d; font-weight: 600; }
+  .mf-section-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #f0ede6; }
+  .mf-section-sub { font-size: 14px; color: #888; margin-bottom: 24px; }
+  .mf-progress-bar { height: 4px; background: #222; border-radius: 10px; margin-bottom: 24px; overflow: hidden; }
+  .mf-progress-fill { height: 100%; background: #b8f554; border-radius: 10px; transition: width 0.4s; }
+  .mf-q-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+  .mf-q-label { font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 500; letter-spacing: 0.3px; text-transform: uppercase; }
+  .mf-q-title { font-size: 17px; font-weight: 500; margin-bottom: 16px; color: #f0ede6; }
+  .mf-q-options { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mf-q-opt { padding: 9px 16px; border-radius: 30px; border: 1.5px solid rgba(255,255,255,0.08); background: transparent; color: #f0ede6; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.15s; }
+  .mf-q-opt:hover { border-color: #8ac43a; }
+  .mf-q-opt.selected { border-color: #b8f554; background: rgba(184,245,84,0.15); color: #b8f554; font-weight: 600; }
+  .mf-q-input { width: 100%; background: #222; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 11px 14px; color: #f0ede6; font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; }
+  .mf-q-input:focus { border-color: #8ac43a; }
+  .mf-q-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mf-sub-label { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .mf-btn-primary { background: #b8f554; color: #0d0d0d; border: none; border-radius: 12px; padding: 14px 28px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; width: 100%; margin-top: 8px; transition: opacity 0.2s; }
+  .mf-btn-primary:hover { opacity: 0.88; }
+  .mf-btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+  .mf-plan-type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px; }
+  .mf-plan-type-card { background: #1a1a1a; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px 14px; cursor: pointer; transition: all 0.15s; text-align: center; }
+  .mf-plan-type-card:hover { border-color: rgba(184,245,84,0.3); }
+  .mf-plan-type-card.selected { border-color: #b8f554; background: rgba(184,245,84,0.08); }
+  .mf-plan-type-weeks { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: #b8f554; }
+  .mf-plan-type-label { font-size: 13px; color: #888; margin-top: 4px; }
+  .mf-plan-type-desc { font-size: 12px; color: #666; margin-top: 6px; }
+  .mf-plan-header { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px 24px; margin-bottom: 16px; }
+  .mf-plan-name { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: #b8f554; }
+  .mf-plan-meta { display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
+  .mf-plan-badge { font-size: 12px; background: rgba(184,245,84,0.1); color: #8ac43a; border-radius: 30px; padding: 4px 12px; font-weight: 500; border: 1px solid rgba(184,245,84,0.2); }
+  .mf-sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+  .mf-sub-tab { padding: 7px 16px; border-radius: 30px; border: 1.5px solid rgba(255,255,255,0.08); background: transparent; color: #888; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .mf-sub-tab:hover { border-color: rgba(184,245,84,0.3); }
+  .mf-sub-tab.active { border-color: #b8f554; color: #b8f554; background: rgba(184,245,84,0.08); }
+  .mf-redo-btn { padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: #888; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; margin-left: auto; }
+  .mf-week-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .mf-week-tab { padding: 7px 16px; border-radius: 30px; border: 1.5px solid rgba(255,255,255,0.08); background: transparent; color: #888; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .mf-week-tab.active { border-color: #b8f554; color: #b8f554; background: rgba(184,245,84,0.08); }
+  .mf-day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .mf-day-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; transition: border-color 0.15s; }
+  .mf-day-card:hover { border-color: rgba(184,245,84,0.3); }
+  .mf-day-card.completed { border-color: #b8f554; background: rgba(184,245,84,0.05); }
+  .mf-day-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .mf-day-title { font-size: 15px; font-weight: 600; margin-bottom: 10px; color: #f0ede6; }
+  .mf-day-items { display: flex; flex-direction: column; gap: 5px; }
+  .mf-day-item { font-size: 13px; color: #ccc; display: flex; align-items: center; gap: 6px; }
+  .mf-day-item::before { content: ''; display: block; width: 4px; height: 4px; border-radius: 50%; background: #b8f554; flex-shrink: 0; }
+  .mf-complete-btn { margin-top: 12px; padding: 7px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: #888; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; width: 100%; transition: all 0.15s; }
+  .mf-complete-btn:hover { border-color: #b8f554; color: #b8f554; }
+  .mf-complete-btn.done { background: rgba(184,245,84,0.12); border-color: #b8f554; color: #b8f554; font-weight: 600; }
+  .mf-nutrition-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+  .mf-macro-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+  .mf-macro { background: #222; border-radius: 10px; padding: 12px; text-align: center; }
+  .mf-macro-val { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #b8f554; }
+  .mf-macro-label { font-size: 11px; color: #888; margin-top: 2px; }
+  .mf-meal-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; margin-bottom: 10px; }
+  .mf-meal-main { display: flex; align-items: center; gap: 14px; }
+  .mf-meal-icon { width: 42px; height: 42px; border-radius: 10px; background: rgba(184,245,84,0.12); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .mf-meal-info { flex: 1; }
+  .mf-meal-time { font-size: 13px; color: #888; margin-bottom: 2px; }
+  .mf-meal-name { font-size: 15px; font-weight: 500; color: #f0ede6; }
+  .mf-alt-toggle { padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: #888; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .mf-alt-toggle:hover { border-color: #8ac43a; color: #8ac43a; }
+  .mf-alt-toggle.showing { border-color: #b8f554; color: #b8f554; background: rgba(184,245,84,0.08); }
+  .mf-meal-alt { margin-top: 12px; padding: 12px 14px; background: #222; border-radius: 10px; border-left: 2px solid #b8f554; }
+  .mf-meal-alt-label { font-size: 11px; color: #8ac43a; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; font-weight: 600; }
+  .mf-meal-alt-name { font-size: 14px; color: #d0cdc5; }
+  .mf-my-score { background: rgba(184,245,84,0.08); border: 1.5px solid #b8f554; border-radius: 16px; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; }
+  .mf-my-score-pts { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; color: #b8f554; }
+  .mf-my-score-label { font-size: 13px; color: #888; }
+  .mf-lb-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+  .mf-lb-row { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.15s; }
+  .mf-lb-row:last-child { border-bottom: none; }
+  .mf-lb-row:hover { background: rgba(255,255,255,0.02); }
+  .mf-lb-rank { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; width: 28px; color: #888; }
+  .mf-lb-rank.top { color: #b8f554; }
+  .mf-lb-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+  .mf-lb-info { flex: 1; }
+  .mf-lb-name { font-size: 15px; font-weight: 500; color: #f0ede6; }
+  .mf-lb-detail { font-size: 12px; color: #888; }
+  .mf-lb-score { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #b8f554; }
+  .mf-lb-bar-wrap { width: 80px; height: 6px; background: #222; border-radius: 10px; overflow: hidden; }
+  .mf-lb-bar { height: 100%; background: #b8f554; border-radius: 10px; }
+  .mf-challenge-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
+  .mf-challenge-icon { width: 42px; height: 42px; border-radius: 10px; background: rgba(184,245,84,0.12); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .mf-challenge-info { flex: 1; }
+  .mf-challenge-title { font-size: 15px; font-weight: 500; color: #f0ede6; }
+  .mf-challenge-sub { font-size: 12px; color: #888; }
+  .mf-challenge-pts { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: #b8f554; }
+  .mf-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .mf-metric { background: #222; border-radius: 10px; padding: 16px; text-align: center; }
+  .mf-loading { text-align: center; padding: 48px 20px; }
+  .mf-spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.08); border-top-color: #b8f554; border-radius: 50%; animation: mf-spin 0.8s linear infinite; margin: 0 auto 16px; }
+  @keyframes mf-spin { to { transform: rotate(360deg); } }
+  .mf-ai-stream { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; white-space: pre-wrap; font-size: 14px; line-height: 1.7; color: #d0cdc5; min-height: 200px; margin-top: 20px; }
+  .mf-lang-screen { min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+  .mf-lang-logo { display: flex; align-items: center; gap: 10px; }
+  .mf-lang-logo img { width: 56px; height: 56px; border-radius: 50%; }
+  .mf-lang-logo-text { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; color: #f0ede6; }
+  .mf-lang-logo-text span { color: #b8f554; }
+  .mf-lang-title { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; text-align: center; color: #f0ede6; }
+  .mf-lang-sub { font-size: 15px; color: #888; text-align: center; }
+  .mf-lang-options { display: flex; gap: 16px; }
+  .mf-lang-btn { padding: 16px 36px; border-radius: 14px; border: 2px solid rgba(255,255,255,0.08); background: #1a1a1a; color: #f0ede6; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.18s; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .mf-lang-btn:hover { border-color: #b8f554; background: rgba(184,245,84,0.07); }
+  .mf-lang-flag { font-size: 28px; }
+  .mf-lang-name { font-size: 14px; font-weight: 500; }
+`;
+
+function MondayFit() {
+  const [lang, setLang] = useState(null);
+  const [tab, setTab] = useState("onboard");
+  const [form, setForm] = useState({ name: "", gender: "", age: "", weight: "", height: "", goal: "", level: "", duration: "1", days: "4" });
+  const [completed, setCompleted] = useState({});
+  const [myPts, setMyPts] = useState(1340);
+  const [selectedWeek, setSelectedWeek] = useState(1);
+  const [generating, setGenerating] = useState(false);
+  const [planReady, setPlanReady] = useState(false);
+  const [showNutrition, setShowNutrition] = useState(false);
+  const [altShown, setAltShown] = useState({});
+  const [aiText, setAiText] = useState("");
+
+  const tr = (key) => T[lang || "en"][key];
+  const isHe = lang === "he";
+
+  const getGoalKey = (g) => {
+    if (!g) return "maintain";
+    if (g.includes("Lose") || g.includes("ירידה")) return "cut";
+    if (g.includes("Bulk") || g.includes("Build") || g.includes("מסה") || g.includes("שריר")) return "bulk";
+    return "maintain";
+  };
+
+  const countCompleted = () => Object.values(completed).filter(Boolean).length;
+  const getTotalDays = () => parseInt(form.duration) * 7;
+  const getMyRank = () => EMPLOYEES.filter((e) => e.pts > myPts).length + 1;
+  const calcProgress = () => {
+    const fields = [form.name, form.gender, form.age, form.weight, form.height, form.goal, form.level, form.duration, form.days];
+    return Math.round((fields.filter(Boolean).length / fields.length) * 100);
+  };
+  const isFormComplete = () => form.name && form.gender && form.age && form.weight && form.height && form.goal && form.level && form.duration && form.days;
+
+  const updateForm = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  const markComplete = (key) => {
+    setCompleted((c) => {
+      const next = { ...c };
+      if (!next[key]) { next[key] = true; setMyPts((p) => p + 120); }
+      else { next[key] = false; setMyPts((p) => Math.max(0, p - 120)); }
+      return next;
+    });
+  };
+
+  const toggleAlt = (idx) => setAltShown((a) => ({ ...a, [idx]: !a[idx] }));
+
+  const resetPlan = () => { setPlanReady(false); setCompleted({}); setMyPts(1340); setAltShown({}); setAiText(""); };
+
+  const generatePlan = async () => {
+    if (!isFormComplete()) return;
+    setGenerating(true);
+    setAiText("");
+    const bmi = (parseFloat(form.weight) / Math.pow(parseFloat(form.height) / 100, 2)).toFixed(1);
+    const prompt = isHe
+      ? `אתה מאמן כושר ותזונאי מקצועי. צור סיכום קצר ומעודד לתוכנית כושר של ${form.duration} שבועות עבור:\n- שם: ${form.name}, ${form.gender}, גיל ${form.age}\n- ${form.weight} ק"ג, ${form.height} ס"מ (BMI: ${bmi})\n- מטרה: ${form.goal}\n- רמה: ${form.level}\n- ${form.days} ימי אימון בשבוע\n\nכתוב 3-4 פסקאות קצרות בעברית:\n1. הערכה אישית (BMI ומה זה אומר עבור המטרה)\n2. סקירת התוכנית ומה לצפות\n3. תחומי מיקוד וטיפים להצלחה\n4. סיום מוטיבציה\n\nשמור על טון חם, ישיר, עד 200 מילים. ללא נקודות.`
+      : `You are a fitness expert. Create a brief encouraging ${form.duration}-week program summary for:\n- Name: ${form.name}, ${form.gender}, age ${form.age}\n- ${form.weight}kg, ${form.height}cm (BMI: ${bmi})\n- Goal: ${form.goal}, Level: ${form.level}, ${form.days} days/week\n\nWrite 3-4 short paragraphs: personal assessment, program overview, key tips, motivational close. Under 200 words, no bullets.`;
+
+    try {
+      const resp = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, stream: true, messages: [{ role: "user", content: prompt }] }),
+      });
+      const reader = resp.body.getReader();
+      const dec = new TextDecoder();
+      let txt = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        for (const line of dec.decode(value).split("\n").filter((l) => l.startsWith("data:"))) {
+          const data = line.slice(5).trim();
+          if (data === "[DONE]") continue;
+          try {
+            const j = JSON.parse(data);
+            if (j.type === "content_block_delta" && j.delta?.text) { txt += j.delta.text; setAiText(txt); }
+          } catch (_) {}
+        }
+      }
+      await new Promise((r) => setTimeout(r, 400));
+      setGenerating(false);
+      setPlanReady(true);
+    } catch (_) {
+      setGenerating(false);
+      setPlanReady(true);
+    }
+  };
+
+  if (!lang) {
+    return (
+      <>
+        <style>{styles}</style>
+        <div className="mf-app">
+          <div className="mf-inner">
+            <div className="mf-lang-screen">
+              <div className="mf-lang-logo">
+                <img src={LOGO_B64} alt="monday.com logo" />
+                <div className="mf-lang-logo-text">monday <span>Fitness</span></div>
+              </div>
+              <div>
+                <div className="mf-lang-title" style={{ marginBottom: 8 }}>Choose your language / בחר שפה</div>
+                <div className="mf-lang-sub">Select to get started</div>
+              </div>
+              <div className="mf-lang-options">
+                <button className="mf-lang-btn" onClick={() => setLang("en")}><span className="mf-lang-flag">🇬🇧</span><span className="mf-lang-name">English</span></button>
+                <button className="mf-lang-btn" onClick={() => setLang("he")}><span className="mf-lang-flag">🇮🇱</span><span className="mf-lang-name">עברית</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  const dur = parseInt(form.duration);
+  const gk = getGoalKey(form.goal);
+  const nut = NUTRITION[gk];
+  const dayPlan = WORKOUT_PLANS[dur] || WORKOUT_PLANS[1];
+  const weeks = Array.from({ length: dur }, (_, i) => i + 1);
+  const totalDays = getTotalDays();
+  const done = countCompleted();
+  const pct = Math.round((done / totalDays) * 100);
+  const bmi = form.weight && form.height ? (parseFloat(form.weight) / Math.pow(parseFloat(form.height) / 100, 2)).toFixed(1) : "—";
+  const myRank = getMyRank();
+  const rankStr = tr("rankOf").replace("%r", myRank).replace("%t", EMPLOYEES.length + 1);
+  const mealIcons = ["🌅", "☀️", "🥤", "🌙", "🌙"];
+
+  const all = [...EMPLOYEES, { name: form.name || "You", dept: "monday.com", pts: myPts, days: done, av: 2, isMe: true }].sort((a, b) => b.pts - a.pts);
+  const maxPts = all[0].pts;
+  const cl = tr("challengeList");
+  const earned = cl.filter((c) => c.done).reduce((a, c) => a + c.pts, 0);
+
+  return (
+    <>
+      <style>{styles}</style>
+      <div className="mf-app" dir={isHe ? "rtl" : "ltr"}>
+        <div className="mf-inner">
+          <div className="mf-header">
+            <div className="mf-logo">
+              <img src={LOGO_B64} alt="monday.com logo" />
+              <div>
+                <div className="mf-logo-text">monday <span>Fitness</span></div>
+                <div className="mf-header-sub">{tr("appSub")}</div>
+              </div>
+            </div>
+            <button className="mf-lang-btn" onClick={() => setLang(null)}>{tr("switchLang")}</button>
+          </div>
+
+          <div className="mf-tabs">
+            {tr("tabs").map((tb, i) => (
+              <button key={i} className={`mf-tab${tab === ["onboard", "leaderboard", "challenges"][i] ? " active" : ""}`} onClick={() => setTab(["onboard", "leaderboard", "challenges"][i])}>{tb}</button>
+            ))}
+          </div>
+
+          {tab === "onboard" && (
+            <>
+              {!generating && !planReady && (
+                <>
+                  <div className="mf-section-title">{tr("buildProgram")}</div>
+                  <div className="mf-section-sub">{tr("buildSub")}</div>
+                  <div className="mf-progress-bar"><div className="mf-progress-fill" style={{ width: `${calcProgress()}%` }} /></div>
+
+                  {[
+                    { step: 0, q: tr("nameQ"), children: <input className="mf-q-input" placeholder={tr("namePh")} value={form.name} onChange={(e) => updateForm("name", e.target.value)} /> },
+                    { step: 1, q: tr("genderQ"), children: <div className="mf-q-options">{tr("genderOpts").map((o) => <button key={o} className={`mf-q-opt${form.gender === o ? " selected" : ""}`} onClick={() => updateForm("gender", o)}>{o}</button>)}</div> },
+                    {
+                      step: 2, q: tr("statsQ"), children: (
+                        <>
+                          <div className="mf-q-row">
+                            <div><div className="mf-sub-label">{tr("ageLbl")}</div><input className="mf-q-input" type="number" placeholder={tr("agePh")} value={form.age} onChange={(e) => updateForm("age", e.target.value)} /></div>
+                            <div><div className="mf-sub-label">{tr("weightLbl")}</div><input className="mf-q-input" type="number" placeholder={tr("weightPh")} value={form.weight} onChange={(e) => updateForm("weight", e.target.value)} /></div>
+                          </div>
+                          <div className="mf-q-row" style={{ marginTop: 10 }}>
+                            <div><div className="mf-sub-label">{tr("heightLbl")}</div><input className="mf-q-input" type="number" placeholder={tr("heightPh")} value={form.height} onChange={(e) => updateForm("height", e.target.value)} /></div>
+                            <div />
+                          </div>
+                        </>
+                      )
+                    },
+                    { step: 3, q: tr("goalQ"), children: <div className="mf-q-options">{tr("goalOpts").map((o) => <button key={o} className={`mf-q-opt${form.goal === o ? " selected" : ""}`} onClick={() => updateForm("goal", o)}>{o}</button>)}</div> },
+                    { step: 4, q: tr("levelQ"), children: <div className="mf-q-options">{tr("levelOpts").map((o) => <button key={o} className={`mf-q-opt${form.level === o ? " selected" : ""}`} onClick={() => updateForm("level", o)}>{o}</button>)}</div> },
+                    {
+                      step: 5, q: tr("durationQ"), children: (
+                        <div className="mf-plan-type-grid">
+                          {tr("durationPlans").map((p) => (
+                            <div key={p.w} className={`mf-plan-type-card${form.duration === p.w ? " selected" : ""}`} onClick={() => updateForm("duration", p.w)}>
+                              <div className="mf-plan-type-weeks">{p.w}W</div>
+                              <div className="mf-plan-type-label">{p.label}</div>
+                              <div className="mf-plan-type-desc">{p.desc}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )
+                    },
+                    { step: 6, q: tr("daysQ"), children: <div className="mf-q-options">{tr("daysOpts").map((o) => <button key={o} className={`mf-q-opt${form.days === o ? " selected" : ""}`} onClick={() => updateForm("days", o)}>{o} {tr("daysLabel")}</button>)}</div> },
+                  ].map(({ step, q, children }) => (
+                    <div key={step} className="mf-q-card">
+                      <div className="mf-q-label">{step + 1} — {tr("steps")[step]}</div>
+                      <div className="mf-q-title">{q}</div>
+                      {children}
+                    </div>
+                  ))}
+
+                  <button className="mf-btn-primary" onClick={generatePlan} disabled={!isFormComplete()}>{tr("generate")}</button>
+                </>
+              )}
+
+              {generating && (
+                <div className="mf-loading">
+                  <div className="mf-spinner" />
+                  <div style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 20, fontWeight: 700, marginBottom: 8, color: "#f0ede6" }}>{tr("generating")}</div>
+                  <div style={{ color: "#888", fontSize: 14 }}>{tr("genSub")}</div>
+                  <div className="mf-ai-stream">{aiText || "..."}</div>
+                </div>
+              )}
+
+              {planReady && (
+                <>
+                  <div className="mf-plan-header">
+                    <div style={{ fontSize: 13, color: "#888", marginBottom: 4 }}>{tr("hey").replace("%n", form.name || "")}</div>
+                    <div className="mf-plan-name">{form.goal}</div>
+                    <div className="mf-plan-meta">
+                      <span className="mf-plan-badge">{dur}W</span>
+                      <span className="mf-plan-badge">{form.days} {tr("daysLabel")}</span>
+                      <span className="mf-plan-badge">{form.level}</span>
+                      <span className="mf-plan-badge">{tr("bmiLabel")} {bmi}</span>
+                    </div>
+                    <div style={{ marginTop: 16 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#888", marginBottom: 6 }}>
+                        <span>{tr("overallProgress")}</span><span>{done}/{totalDays} — {pct}%</span>
+                      </div>
+                      <div className="mf-progress-bar" style={{ height: 8 }}><div className="mf-progress-fill" style={{ width: `${pct}%` }} /></div>
+                    </div>
+                  </div>
+
+                  {aiText && <div className="mf-ai-stream" style={{ marginBottom: 16 }}>{aiText}</div>}
+
+                  <div className="mf-sub-tabs">
+                    <button className={`mf-sub-tab${!showNutrition ? " active" : ""}`} onClick={() => setShowNutrition(false)}>🏋️ {tr("workoutTab")}</button>
+                    <button className={`mf-sub-tab${showNutrition ? " active" : ""}`} onClick={() => setShowNutrition(true)}>🥗 {tr("nutritionTab")}</button>
+                    <button className="mf-redo-btn" onClick={resetPlan}>{tr("redoBtn")}</button>
+                  </div>
+
+                  {!showNutrition && (
+                    <>
+                      {dur > 1 && (
+                        <div className="mf-week-tabs">
+                          {weeks.map((w) => <button key={w} className={`mf-week-tab${selectedWeek === w ? " active" : ""}`} onClick={() => setSelectedWeek(w)}>Week {w}</button>)}
+                        </div>
+                      )}
+                      <div className="mf-day-grid">
+                        {dayPlan.map((d, i) => {
+                          const key = `w${selectedWeek}d${i}`;
+                          const isDone = completed[key];
+                          return (
+                            <div key={i} className={`mf-day-card${isDone ? " completed" : ""}`}>
+                              <div className="mf-day-label">{isHe ? d.dayHe : d.day}</div>
+                              <div className="mf-day-title">{isHe ? d.focusHe : d.focus}</div>
+                              <div className="mf-day-items">{d.items.map((it, j) => <div key={j} className="mf-day-item">{it}</div>)}</div>
+                              <button className={`mf-complete-btn${isDone ? " done" : ""}`} onClick={() => markComplete(key)}>{isDone ? tr("completed") : tr("markComplete")}</button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+
+                  {showNutrition && (
+                    <>
+                      <div className="mf-nutrition-card">
+                        <div style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 17, fontWeight: 700, marginBottom: 4, color: "#f0ede6" }}>{tr("dailyTargets")}</div>
+                        <div style={{ fontSize: 13, color: "#888" }}>{tr("tailored")} {form.goal}</div>
+                        <div className="mf-macro-row">
+                          <div className="mf-macro"><div className="mf-macro-val">{nut.cal}</div><div className="mf-macro-label">{tr("calLbl")}</div></div>
+                          <div className="mf-macro"><div className="mf-macro-val">{nut.p}g</div><div className="mf-macro-label">{tr("proteinLbl")}</div></div>
+                          <div className="mf-macro"><div className="mf-macro-val">{nut.c}g</div><div className="mf-macro-label">{tr("carbsLbl")}</div></div>
+                          <div className="mf-macro"><div className="mf-macro-val">{nut.f}g</div><div className="mf-macro-label">{tr("fatLbl")}</div></div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: 13, color: "#888", marginBottom: 10, fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.4px" }}>{tr("mealIdeas")}</div>
+                      {nut.meals.map((m, i) => (
+                        <div key={i} className="mf-meal-card">
+                          <div className="mf-meal-main">
+                            <div className="mf-meal-icon">{mealIcons[i]}</div>
+                            <div className="mf-meal-info">
+                              <div className="mf-meal-time">{tr("mealTimes")[i]}</div>
+                              <div className="mf-meal-name">{isHe ? m.he : m.en}</div>
+                            </div>
+                            <button className={`mf-alt-toggle${altShown[i] ? " showing" : ""}`} onClick={() => toggleAlt(i)}>{altShown[i] ? tr("hideAlt") : tr("altBtn")}</button>
+                          </div>
+                          {altShown[i] && (
+                            <div className="mf-meal-alt">
+                              <div className="mf-meal-alt-label">{tr("altLabel")}</div>
+                              <div className="mf-meal-alt-name">{isHe ? m.altHe : m.altEn}</div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </>
+              )}
+            </>
+          )}
+
+          {tab === "leaderboard" && (
+            <>
+              <div className="mf-section-title">{tr("leaderboard")}</div>
+              <div className="mf-section-sub">{tr("lbSub")}</div>
+              <div className="mf-my-score">
+                <div>
+                  <div className="mf-my-score-pts">{myPts}</div>
+                  <div className="mf-my-score-label">{tr("yourScore")} · {rankStr}</div>
+                </div>
+                <div style={{ marginLeft: "auto", textAlign: isHe ? "left" : "right" }}>
+                  <div style={{ fontSize: 13, color: "#888" }}>{done} {tr("daysLabel2")}</div>
+                  <div style={{ fontSize: 12, color: "#888", marginTop: 2 }}>{totalDays - done} {tr("remaining")}</div>
+                </div>
+              </div>
+              <div className="mf-lb-card">
+                {all.map((e, i) => {
+                  const av = AVATARS[e.av % AVATARS.length];
+                  const initials = e.name.split(" ").map((n) => n[0]).join("").slice(0, 2);
+                  const bar = Math.round((e.pts / maxPts) * 100);
+                  return (
+                    <div key={i} className="mf-lb-row">
+                      <div className={`mf-lb-rank${i < 3 ? " top" : ""}`}>{i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1}</div>
+                      <div className="mf-lb-avatar" style={{ background: av.bg, color: av.txt }}>{initials}</div>
+                      <div className="mf-lb-info">
+                        <div className="mf-lb-name">{e.name}{e.isMe ? ` (${isHe ? "אתה" : "you"})` : ""}</div>
+                        <div className="mf-lb-detail">{e.dept} · {e.days} {isHe ? "ימים" : "days"}</div>
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+                        <div className="mf-lb-score">{e.pts}</div>
+                        <div className="mf-lb-bar-wrap"><div className="mf-lb-bar" style={{ width: `${bar}%` }} /></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {tab === "challenges" && (
+            <>
+              <div className="mf-section-title">{tr("challenges")}</div>
+              <div className="mf-section-sub">{tr("challengesSub")}</div>
+              <div className="mf-metrics">
+                <div className="mf-metric"><div className="mf-macro-val">{earned}</div><div className="mf-macro-label">{tr("pointsEarned")}</div></div>
+                <div className="mf-metric"><div className="mf-macro-val">{cl.filter((c) => c.done).length}/{cl.length}</div><div className="mf-macro-label">{tr("challengesDone")}</div></div>
+              </div>
+              {cl.map((c, i) => (
+                <div key={i} className="mf-challenge-card" style={{ opacity: c.done ? 0.5 : 1 }}>
+                  <div className="mf-challenge-icon">{c.icon}</div>
+                  <div className="mf-challenge-info">
+                    <div className="mf-challenge-title">{c.title}</div>
+                    <div className="mf-challenge-sub">{c.sub}</div>
+                  </div>
+                  <div className="mf-challenge-pts">+{c.pts}</div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(MondayFit));
+</script>
+</body>
+</html>
